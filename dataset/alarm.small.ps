@@ -1,0 +1,792 @@
+%!PS-Adobe-2.0
+%%Creator: dot version uwin97 (4-15-97)
+%%For: (nir) Nir Friedman,795 Soda,(510) 642-9595,
+%%Title: G
+%%Pages: (atend)
+%%BoundingBox: 180 0 433 792
+%%EndComments
+%%BeginProlog
+save
+/DotDict 200 dict def
+DotDict begin
+
+%%BeginResource: procset
+/coord-font-family /Times-Roman def
+/default-font-family /Times-Roman def
+/coordfont coord-font-family findfont 8 scalefont def
+
+/InvScaleFactor 1.0 def
+/set_scale {
+	dup 1 exch div /InvScaleFactor exch def
+	dup scale
+} bind def
+
+% styles
+/solid { } bind def
+/dashed { [9 InvScaleFactor mul dup ] 0 setdash } bind def
+/dotted { [1 InvScaleFactor mul 6 InvScaleFactor mul] 0 setdash } bind def
+/invis {/fill {newpath} def /stroke {newpath} def /show {pop newpath} def} bind def
+/bold { 2 setlinewidth } bind def
+/filled { } bind def
+/unfilled { } bind def
+/rounded { } bind def
+/diagonals { } bind def
+
+% hooks for setting color 
+/nodecolor { sethsbcolor } bind def
+/edgecolor { sethsbcolor } bind def
+/graphcolor { sethsbcolor } bind def
+/nopcolor {pop pop pop} bind def
+
+/beginpage {	% i j npages
+	/npages exch def
+	/j exch def
+	/i exch def
+	/str 10 string def
+	npages 1 gt {
+		gsave
+			coordfont setfont
+			0 0 moveto
+			(\() show i str cvs show (,) show j str cvs show (\)) show
+		grestore
+	} if
+} bind def
+
+/set_font {
+	findfont exch
+	scalefont setfont
+} def
+
+/arrowhead {
+	/arrowwidth exch def
+	/arrowlength exch def
+	gsave
+		3 1 roll
+		translate
+			rotate
+			newpath
+			arrowlength arrowwidth 2 div moveto
+			0 0 lineto
+			arrowlength arrowwidth -2 div lineto
+		closepath fill
+		stroke
+	grestore
+} def
+
+% draw aligned label in bounding box aligned to current point
+% alignfactor tells what fraction to place on the left.
+% -.5 is centered.
+/alignedtext {			% text labelwidth fontsz alignfactor
+	/alignfactor exch def
+	/fontsz exch def
+	/width exch def
+	/text exch def
+	gsave
+		% even if node or edge is dashed, don't paint text with dashes
+		[] 0 setdash
+		currentpoint newpath moveto
+		text stringwidth pop
+		alignfactor mul fontsz -.3 mul rmoveto
+		text show
+	grestore
+} def
+
+/boxprim {				% xcorner ycorner xsize ysize
+		4 2 roll
+		moveto
+		2 copy
+		exch 0 rlineto
+		0 exch rlineto
+		pop neg 0 rlineto
+		closepath
+} bind def
+
+/ellipse_path {
+	/ry exch def
+	/rx exch def
+	/y exch def
+	/x exch def
+	matrix currentmatrix
+	newpath
+	x y translate
+	rx ry scale
+	0 0 1 0 360 arc
+	setmatrix
+} bind def
+
+/endpage { showpage } bind def
+
+/layercolorseq
+	[	% layer color sequence - darkest to lightest
+		[0 0 0]
+		[.2 .8 .8]
+		[.4 .8 .8]
+		[.6 .8 .8]
+		[.8 .8 .8]
+	]
+def
+
+/setlayer {/maxlayer exch def /curlayer exch def
+	layercolorseq curlayer get
+	aload pop sethsbcolor
+	/nodecolor {nopcolor} def
+	/edgecolor {nopcolor} def
+	/graphcolor {nopcolor} def
+} bind def
+
+/onlayer { curlayer ne {invis} if } def
+
+/onlayers {
+	/myupper exch def
+	/mylower exch def
+	curlayer mylower lt
+	curlayer myupper gt
+	or
+	{invis} if
+} def
+
+/curlayer 0 def
+
+%%EndResource
+%%EndProlog
+%%BeginSetup
+14 default-font-family set_font
+% /arrowlength 10 def
+% /arrowwidth 5 def
+%%EndSetup
+%%Page: 1 1
+%%PageBoundingBox: 180 0 433 792
+gsave
+179 -1 254 793 boxprim clip newpath
+180 0 translate
+0 0 1 beginpage
+0.3099 set_scale
+0 0 translate 0 rotate
+0.000 0.000 0.000 graphcolor
+14.00 /Times-Roman set_font
+
+%	LVFAILURE
+gsave 10 dict begin
+151 774 51 18 ellipse_path
+stroke
+gsave 10 dict begin
+151 775 moveto (LVFAILURE) 77 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	HISTORY
+gsave 10 dict begin
+42 522 42 18 ellipse_path
+stroke
+gsave 10 dict begin
+42 523 moveto (HISTORY) 60 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	LVFAILURE -> HISTORY
+newpath 143 756 moveto
+124 711 75 597 53 547 curveto
+stroke
+50 540 66.80 10.00 5.00 arrowhead
+
+%	LVEDVOLUME
+gsave 10 dict begin
+151 522 60 18 ellipse_path
+stroke
+gsave 10 dict begin
+151 523 moveto (LVEDVOLUME) 97 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	LVFAILURE -> LVEDVOLUME
+newpath 151 756 moveto
+151 711 151 598 151 547 curveto
+stroke
+151 540 90.00 10.00 5.00 arrowhead
+
+%	STROKEVOLUME
+gsave 10 dict begin
+287 522 69 18 ellipse_path
+stroke
+gsave 10 dict begin
+287 523 moveto (STROKEVOLUME) 114 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	LVFAILURE -> STROKEVOLUME
+newpath 161 756 moveto
+185 712 246 598 273 547 curveto
+stroke
+277 540 119.74 10.00 5.00 arrowhead
+
+%	CVP
+gsave 10 dict begin
+119 270 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+119 271 moveto (CVP) 27 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	LVEDVOLUME -> CVP
+newpath 149 504 moveto
+143 459 128 345 122 295 curveto
+stroke
+121 288 81.87 10.00 5.00 arrowhead
+
+%	PCWP
+gsave 10 dict begin
+184 270 31 18 ellipse_path
+stroke
+gsave 10 dict begin
+184 271 moveto (PCWP) 38 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	LVEDVOLUME -> PCWP
+newpath 153 504 moveto
+159 459 175 345 181 295 curveto
+stroke
+182 288 98.13 10.00 5.00 arrowhead
+
+%	HYPOVOLEMIA
+gsave 10 dict begin
+279 774 63 18 ellipse_path
+stroke
+gsave 10 dict begin
+279 775 moveto (HYPOVOLEMIA) 102 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	HYPOVOLEMIA -> LVEDVOLUME
+newpath 270 756 moveto
+247 711 189 597 163 547 curveto
+stroke
+160 540 66.80 10.00 5.00 arrowhead
+
+%	HYPOVOLEMIA -> STROKEVOLUME
+newpath 280 756 moveto
+281 711 285 598 286 547 curveto
+stroke
+286 540 90.00 10.00 5.00 arrowhead
+
+%	CO
+gsave 10 dict begin
+329 270 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+329 271 moveto (CO) 19 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	STROKEVOLUME -> CO
+newpath 290 504 moveto
+298 459 316 345 325 295 curveto
+stroke
+326 288 98.13 10.00 5.00 arrowhead
+
+%	ERRLOWOUTPUT
+gsave 10 dict begin
+447 522 69 18 ellipse_path
+stroke
+gsave 10 dict begin
+447 523 moveto (ERRLOWOUTPUT) 114 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	HRBP
+gsave 10 dict begin
+463 270 30 18 ellipse_path
+stroke
+gsave 10 dict begin
+463 271 moveto (HRBP) 36 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	ERRLOWOUTPUT -> HRBP
+newpath 448 504 moveto
+451 459 458 346 462 295 curveto
+stroke
+462 288 90.00 10.00 5.00 arrowhead
+
+%	HR
+gsave 10 dict begin
+550 522 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+550 523 moveto (HR) 19 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	HR -> HRBP
+newpath 544 504 moveto
+529 460 489 345 471 295 curveto
+stroke
+469 288 74.05 10.00 5.00 arrowhead
+
+%	HREKG
+gsave 10 dict begin
+552 270 36 18 ellipse_path
+stroke
+gsave 10 dict begin
+552 271 moveto (HREKG) 48 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	HR -> HREKG
+newpath 550 504 moveto
+551 459 552 346 552 295 curveto
+stroke
+552 288 90.00 10.00 5.00 arrowhead
+
+%	HRSAT
+gsave 10 dict begin
+634 270 35 18 ellipse_path
+stroke
+gsave 10 dict begin
+634 271 moveto (HRSAT) 45 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	HR -> HRSAT
+newpath 556 504 moveto
+570 460 608 346 626 295 curveto
+stroke
+628 288 105.95 10.00 5.00 arrowhead
+
+%	HR -> CO
+newpath 536 506 moveto
+499 463 393 342 349 292 curveto
+stroke
+343 286 45.00 10.00 5.00 arrowhead
+
+%	ERRCAUTER
+gsave 10 dict begin
+637 522 53 18 ellipse_path
+stroke
+gsave 10 dict begin
+637 523 moveto (ERRCAUTER) 83 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	ERRCAUTER -> HREKG
+newpath 631 504 moveto
+616 459 578 345 560 295 curveto
+stroke
+558 288 74.05 10.00 5.00 arrowhead
+
+%	ERRCAUTER -> HRSAT
+newpath 637 504 moveto
+636 459 635 346 634 295 curveto
+stroke
+634 288 90.00 10.00 5.00 arrowhead
+
+%	ANAPHYLAXIS
+gsave 10 dict begin
+358 1278 61 18 ellipse_path
+stroke
+gsave 10 dict begin
+358 1279 moveto (ANAPHYLAXIS) 99 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	TPR
+gsave 10 dict begin
+367 1026 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+367 1027 moveto (TPR) 25 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	ANAPHYLAXIS -> TPR
+newpath 359 1260 moveto
+361 1215 365 1102 366 1051 curveto
+stroke
+366 1044 90.00 10.00 5.00 arrowhead
+
+%	CATECHOL
+gsave 10 dict begin
+550 774 49 18 ellipse_path
+stroke
+gsave 10 dict begin
+550 775 moveto (CATECHOL) 74 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	TPR -> CATECHOL
+newpath 379 1009 moveto
+411 966 495 849 532 799 curveto
+stroke
+537 792 125.54 10.00 5.00 arrowhead
+
+%	BP
+gsave 10 dict begin
+348 18 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+348 19 moveto (BP) 17 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	TPR -> BP
+newpath 367 1008 moveto
+367 914 366 480 362 252 curveto
+361 193 354 89 350 42 curveto
+stroke
+349 36 80.54 10.00 5.00 arrowhead
+
+%	ARTCO2
+gsave 10 dict begin
+634 1278 39 18 ellipse_path
+stroke
+gsave 10 dict begin
+634 1279 moveto (ARTCO2) 54 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	EXPCO2
+gsave 10 dict begin
+686 1026 38 18 ellipse_path
+stroke
+gsave 10 dict begin
+686 1027 moveto (EXPCO2) 52 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	ARTCO2 -> EXPCO2
+newpath 638 1260 moveto
+648 1215 671 1101 681 1051 curveto
+stroke
+682 1044 98.13 10.00 5.00 arrowhead
+
+%	ARTCO2 -> CATECHOL
+newpath 634 1260 moveto
+634 1212 632 1079 621 1008 curveto
+610 947 575 845 559 798 curveto
+stroke
+557 792 71.57 10.00 5.00 arrowhead
+
+%	VENTLUNG
+gsave 10 dict begin
+674 1782 50 18 ellipse_path
+stroke
+gsave 10 dict begin
+674 1783 moveto (VENTLUNG) 76 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	VENTLUNG -> EXPCO2
+newpath 675 1764 moveto
+677 1720 683 1610 685 1548 curveto
+687 1402 686 1134 686 1051 curveto
+stroke
+686 1044 90.00 10.00 5.00 arrowhead
+
+%	MINVOL
+gsave 10 dict begin
+542 1530 40 18 ellipse_path
+stroke
+gsave 10 dict begin
+542 1531 moveto (MINVOL) 55 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	VENTLUNG -> MINVOL
+newpath 665 1764 moveto
+642 1720 582 1605 555 1555 curveto
+stroke
+551 1548 60.26 10.00 5.00 arrowhead
+
+%	VENTALV
+gsave 10 dict begin
+634 1530 45 18 ellipse_path
+stroke
+gsave 10 dict begin
+634 1531 moveto (VENTALV) 65 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	VENTLUNG -> VENTALV
+newpath 671 1764 moveto
+664 1719 646 1606 638 1555 curveto
+stroke
+637 1548 81.87 10.00 5.00 arrowhead
+
+%	INTUBATION
+gsave 10 dict begin
+535 2034 55 18 ellipse_path
+stroke
+gsave 10 dict begin
+535 2035 moveto (INTUBATION) 86 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	INTUBATION -> VENTLUNG
+newpath 545 2016 moveto
+569 1972 633 1857 660 1807 curveto
+stroke
+664 1800 119.74 10.00 5.00 arrowhead
+
+%	INTUBATION -> MINVOL
+newpath 535 2016 moveto
+535 1970 535 1848 542 1782 curveto
+stroke
+newpath 542 1782 moveto
+548 1718 545 1605 543 1555 curveto
+stroke
+543 1548 90.00 10.00 5.00 arrowhead
+
+%	INTUBATION -> VENTALV
+newpath 542 1782 moveto
+542 1775 544 1769 547 1764 curveto
+568 1704 607 1601 625 1554 curveto
+stroke
+627 1548 108.43 10.00 5.00 arrowhead
+
+%	SHUNT
+gsave 10 dict begin
+437 1782 35 18 ellipse_path
+stroke
+gsave 10 dict begin
+437 1783 moveto (SHUNT) 46 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	INTUBATION -> SHUNT
+newpath 528 2016 moveto
+510 1971 466 1857 447 1807 curveto
+stroke
+444 1800 66.80 10.00 5.00 arrowhead
+
+%	PRESS
+gsave 10 dict begin
+585 1782 32 18 ellipse_path
+stroke
+gsave 10 dict begin
+585 1783 moveto (PRESS) 41 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	INTUBATION -> PRESS
+newpath 539 2016 moveto
+548 1971 570 1857 580 1807 curveto
+stroke
+581 1800 98.13 10.00 5.00 arrowhead
+
+%	FIO2
+gsave 10 dict begin
+468 1530 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+468 1531 moveto (FIO2) 29 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	PVSAT
+gsave 10 dict begin
+475 1278 34 18 ellipse_path
+stroke
+gsave 10 dict begin
+475 1279 moveto (PVSAT) 44 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	FIO2 -> PVSAT
+newpath 469 1512 moveto
+470 1467 473 1354 474 1303 curveto
+stroke
+474 1296 90.00 10.00 5.00 arrowhead
+
+%	SAO2
+gsave 10 dict begin
+453 1026 29 18 ellipse_path
+stroke
+gsave 10 dict begin
+453 1027 moveto (SAO2) 35 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	PVSAT -> SAO2
+newpath 473 1260 moveto
+469 1215 460 1102 456 1051 curveto
+stroke
+455 1044 81.87 10.00 5.00 arrowhead
+
+%	VENTALV -> ARTCO2
+newpath 634 1512 moveto
+634 1467 634 1354 634 1303 curveto
+stroke
+634 1296 90.00 10.00 5.00 arrowhead
+
+%	VENTALV -> PVSAT
+newpath 623 1512 moveto
+595 1468 522 1352 490 1302 curveto
+stroke
+486 1295 60.26 10.00 5.00 arrowhead
+
+%	SAO2 -> CATECHOL
+newpath 460 1008 moveto
+477 964 521 850 540 799 curveto
+stroke
+543 792 113.20 10.00 5.00 arrowhead
+
+%	SHUNT -> SAO2
+newpath 437 1764 moveto
+435 1690 431 1409 435 1260 curveto
+437 1202 446 1102 450 1053 curveto
+stroke
+451 1044 96.34 10.00 5.00 arrowhead
+
+%	PULMEMBOLUS
+gsave 10 dict begin
+395 2034 65 18 ellipse_path
+stroke
+gsave 10 dict begin
+395 2035 moveto (PULMEMBOLUS) 105 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	PULMEMBOLUS -> SHUNT
+newpath 398 2016 moveto
+406 1971 424 1857 433 1807 curveto
+stroke
+434 1800 98.13 10.00 5.00 arrowhead
+
+%	PAP
+gsave 10 dict begin
+368 1782 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+368 1783 moveto (PAP) 25 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	PULMEMBOLUS -> PAP
+newpath 393 2016 moveto
+388 1971 376 1858 371 1807 curveto
+stroke
+370 1800 81.87 10.00 5.00 arrowhead
+
+%	KINKEDTUBE
+gsave 10 dict begin
+759 2034 57 18 ellipse_path
+stroke
+gsave 10 dict begin
+759 2035 moveto (KINKEDTUBE) 90 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	KINKEDTUBE -> VENTLUNG
+newpath 753 2016 moveto
+738 1971 700 1857 682 1807 curveto
+stroke
+680 1800 74.05 10.00 5.00 arrowhead
+
+%	KINKEDTUBE -> PRESS
+newpath 747 2016 moveto
+716 1972 636 1856 601 1806 curveto
+stroke
+597 1799 60.26 10.00 5.00 arrowhead
+
+%	VENTTUBE
+gsave 10 dict begin
+646 2034 49 18 ellipse_path
+stroke
+gsave 10 dict begin
+646 2035 moveto (VENTTUBE) 73 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	VENTTUBE -> VENTLUNG
+newpath 648 2016 moveto
+653 1971 666 1858 671 1807 curveto
+stroke
+672 1800 98.13 10.00 5.00 arrowhead
+
+%	VENTTUBE -> PRESS
+newpath 642 2016 moveto
+631 1971 604 1857 591 1807 curveto
+stroke
+589 1800 74.05 10.00 5.00 arrowhead
+
+%	MINVOLSET
+gsave 10 dict begin
+589 2538 52 18 ellipse_path
+stroke
+gsave 10 dict begin
+589 2539 moveto (MINVOLSET) 80 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	VENTMACH
+gsave 10 dict begin
+589 2286 51 18 ellipse_path
+stroke
+gsave 10 dict begin
+589 2287 moveto (VENTMACH) 79 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	MINVOLSET -> VENTMACH
+newpath 589 2520 moveto
+589 2475 589 2362 589 2311 curveto
+stroke
+589 2304 90.00 10.00 5.00 arrowhead
+
+%	VENTMACH -> VENTTUBE
+newpath 593 2268 moveto
+603 2223 629 2109 640 2059 curveto
+stroke
+642 2052 105.95 10.00 5.00 arrowhead
+
+%	DISCONNECT
+gsave 10 dict begin
+703 2286 56 18 ellipse_path
+stroke
+gsave 10 dict begin
+703 2287 moveto (DISCONNECT) 88 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	DISCONNECT -> VENTTUBE
+newpath 699 2268 moveto
+689 2223 663 2109 652 2059 curveto
+stroke
+650 2052 74.05 10.00 5.00 arrowhead
+
+%	CATECHOL -> HR
+newpath 550 756 moveto
+550 711 550 598 550 547 curveto
+stroke
+550 540 90.00 10.00 5.00 arrowhead
+
+%	INSUFFANESTH
+gsave 10 dict begin
+552 1026 63 18 ellipse_path
+stroke
+gsave 10 dict begin
+552 1027 moveto (INSUFFANESTH) 103 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	INSUFFANESTH -> CATECHOL
+newpath 552 1008 moveto
+551 963 550 850 550 799 curveto
+stroke
+550 792 90.00 10.00 5.00 arrowhead
+
+%	CO -> BP
+newpath 330 252 moveto
+334 207 342 94 346 43 curveto
+stroke
+347 36 98.13 10.00 5.00 arrowhead
+endpage
+grestore
+%%PageTrailer
+%%EndPage: 1
+%%Trailer
+%%Pages: 1
+end
+restore
+%%EOF
