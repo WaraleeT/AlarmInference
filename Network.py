@@ -48,12 +48,18 @@ class Network(object):
             else:
                 return cpd
 
-    def sample_prior(self, name):
-        prior = self.cpd[name]
-        r = np.random.uniform()
+    def sample(self, name, given=dict(), r=None):
+        cpd = self.cpd[name]
+        if not set(self.node[name]['parents']) == set(given.keys()):
+            raise Exception('Parent samples need to be provided to sample child.')
+        if len(given) > 0:
+            cpd = bn.get_probability(name, evidence=given)
+        if r is None:
+            r = np.random.uniform()
+        print(r)
         sum = 0
-        for column in prior:
-            sum += list(prior[column])[0]
+        for column in cpd:
+            sum += list(cpd[column])[0]
             if r < sum:
                 return column
 
