@@ -1,4 +1,7 @@
+import numpy as np
 import pandas as pd
+
+
 class Network(object):
 
     def __init__(self, name):
@@ -6,9 +9,11 @@ class Network(object):
         self.node = dict()
         self.parents = dict()
         self.cpd = dict()
+        return
 
     def add_node(self, name, node_type, levels, values):
         self.node[name] = {'type': node_type, 'n': levels, 'levels': values}
+        return
 
     def add_probability(self, child, parents, table):
         self.node[child]['parents'] = parents
@@ -20,12 +25,37 @@ class Network(object):
         if len(parents) > 1:
             index = pd.MultiIndex.from_tuples(indices, names=parents)
             self.cpd[child] = pd.DataFrame(data=values, columns=bn.node[child]['levels'], index=index)
-        if len(parents) == 1 and not parents[0] is None:
+        if len(parents) == 1 and parents[0] is not None:
             df = pd.DataFrame(data=values, columns=bn.node[child]['levels'], index=indices)
             df.index.name = parents[0]
             self.cpd[child] = df
         if parents[0] is None:
             self.cpd[child] = pd.DataFrame(data=values, columns=bn.node[child]['levels'])
+        return
+
+    def get_probability(self, name, evidence=dict(), value=None):
+        cpd = self.cpd[name]
+        if len(evidence) > 0:
+            levels = list(evidence.keys())
+            values = list(evidence.values())
+            if value is None:
+                return cpd.xs(values, level=levels)
+            else:
+                return cpd.xs(values, level=levels)[value]
+        else:
+            if value is not None:
+                return cpd[value]
+            else:
+                return cpd
+
+    def sample_prior(self, name):
+        prior = self.cpd[name]
+        r = np.random.uniform()
+        sum = 0
+        for column in prior:
+            sum += list(prior[column])[0]
+            if r < sum:
+                return column
 
 bn = Network('Alarm')
 bn.add_node('HISTORY', 'discrete', 2, ('TRUE', 'FALSE'))
