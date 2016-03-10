@@ -1,18 +1,31 @@
-import pickle
+import pandas as pd
 class Network(object):
 
     def __init__(self, name):
         self.name = name
-        self.nodes = dict()
-        self.probability = dict()
+        self.node = dict()
         self.parents = dict()
+        self.cpd = dict()
 
     def add_node(self, name, node_type, levels, values):
-        self.nodes[name] = (node_type, levels, values)
+        self.node[name] = {'type': node_type, 'n': levels, 'levels': values}
 
     def add_probability(self, child, parents, table):
-        self.parents[child] = parents
-        self.probability[child] = table
+        self.node[child]['parents'] = parents
+        indices = list()
+        values = list()
+        for row in table:
+            indices.append(row[0])
+            values.append(row[1])
+        if len(parents) > 1:
+            index = pd.MultiIndex.from_tuples(indices, names=parents)
+            self.cpd[child] = pd.DataFrame(data=values, columns=bn.node[child]['levels'], index=index)
+        if len(parents) == 1 and not parents[0] is None:
+            df = pd.DataFrame(data=values, columns=bn.node[child]['levels'], index=indices)
+            df.index.name = parents[0]
+            self.cpd[child] = df
+        if parents[0] is None:
+            self.cpd[child] = pd.DataFrame(data=values, columns=bn.node[child]['levels'])
 
 bn = Network('Alarm')
 bn.add_node('HISTORY', 'discrete', 2, ('TRUE', 'FALSE'))
@@ -55,12 +68,13 @@ bn.add_node('BP', 'discrete', 3, ('LOW', 'NORMAL', 'HIGH'))
 
 bn.add_probability('HISTORY', ['LVFAILURE'], [(('TRUE'), (0.9, 0.1)),
                                               (('FALSE'), (0.01, 0.99))])
+
 bn.add_probability('CVP', ['LVEDVOLUME'], [(('LOW'), (0.95, 0.04, 0.01)),
                                            (('NORMAL'), (0.04, 0.95, 0.01)),
-                                           ('HIGH'), (0.01, 0.29, 0.7)])
+                                           (('HIGH'), (0.01, 0.29, 0.7))])
 bn.add_probability('PCWP', ['LVFAILURE'], [(('LOW'), (0.95, 0.04, 0.01)),
                                            (('NORMAL'), (0.04, 0.95, 0.01)),
-                                           ('HIGH'), (0.01, 0.04, 0.95)])
+                                           (('HIGH'), (0.01, 0.04, 0.95))])
 bn.add_probability('HYPOVOLEMIA', [None], [((None), (0.2, 0.8))])
 bn.add_probability('LVEDVOLUME', ['HYPOVOLEMIA', 'LVFAILURE'], [(('TRUE', 'TRUE'), (0.95, 0.04, 0.01)),
                                                                 (('FALSE', 'TRUE'), (0.98, 0.01, 0.01)),
@@ -200,8 +214,8 @@ bn.add_probability('PRESS', ['INTUBATION', 'KINKEDTUBE', 'VENTTUBE'], [(('NORMAL
 bn.add_probability('DISCONNECT', [None], [((None), (0.1, 0.9))])
 bn.add_probability('MINVOLSET', [None], [((None), (0.05, 0.9, 0.05))])
 bn.add_probability('VENTMACH', ['MINVOLSET'], [(('LOW'), (0.05, 0.93, 0.01, 0.01)),
-                                           (('NORMAL'), (0.05, 0.01, 0.93, 0.01)),
-                                           ('HIGH'), (0.05, 0.01, 0.01, 0.93)])
+                                               (('NORMAL'), (0.05, 0.01, 0.93, 0.01)),
+                                               (('HIGH'), (0.05, 0.01, 0.01, 0.93))])
 bn.add_probability('VENTTUBE', ['DISCONNECT', 'VENTMACH'], [(('TRUE', 'ZERO'), (0.97, 0.01, 0.01, 0.01)),
                                                             (('FALSE', 'ZERO'), (0.97, 0.01, 0.01, 0.01)),
                                                             (('TRUE', 'LOW'), (0.97, 0.01, 0.01, 0.01)),
@@ -290,7 +304,7 @@ bn.add_probability('VENTALV', ['INTUBATION', 'VENTLUNG'], [(('NORMAL', 'ZERO'), 
 bn.add_probability('ARTCO2', ['VENTALV'], [(('ZERO'), (0.01, 0.01, 0.98)),
                                            (('LOW'), (0.01, 0.01, 0.98)),
                                            (('NORMAL'), (0.04, 0.92, 0.04)),
-                                           ('HIGH'), (0.9, 0.09, 0.01)])
+                                           (('HIGH'), (0.9, 0.09, 0.01))])
 bn.add_probability('CATECHOL', ['ARTCO2', 'INSUFFANESTH', 'SAO2', 'TPR'],
                    [(('LOW', 'TRUE', 'LOW', 'LOW'), (0.01, 0.99)),
                     (('NORMAL', 'TRUE', 'LOW', 'LOW'), (0.01, 0.99)),
