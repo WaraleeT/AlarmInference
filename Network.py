@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-
+from progress.bar import ChargingBar as Bar
 
 class Network(object):
 
@@ -101,6 +101,23 @@ class Network(object):
                     # print(given)
                     sample[node] = self.sample(node, given)
         return sample
+
+    def rejection_sample(self, predict=dict(), given=dict(), n=100):
+        sum = 0
+        iter = n
+        bar = Bar('Sampling', max=iter)
+        for i in range(iter):
+            bar.next()
+            sample = self.compute_sample()
+            evidence = {key: sample[key] for key in given.keys()}
+            if not given == evidence:
+                continue
+            evidence = {key: sample[key] for key in predict.keys()}
+            if not predict == evidence:
+                continue
+            sum += 1
+        bar.finish()
+        return sum/iter
 
 bn = Network('Alarm')
 bn.add_node('HISTORY', 'discrete', 2, ('TRUE', 'FALSE'))
