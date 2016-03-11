@@ -7,7 +7,7 @@ class Network(object):
     def __init__(self, name):
         self.name = name
         self.node = dict()
-        self.parents = dict()
+        # self.parents = dict()
         self.cpd = dict()
         return
 
@@ -24,44 +24,83 @@ class Network(object):
             values.append(row[1])
         if len(parents) > 1:
             index = pd.MultiIndex.from_tuples(indices, names=parents)
-            self.cpd[child] = pd.DataFrame(data=values, columns=bn.node[child]['levels'], index=index)
+            self.cpd[child] = pd.DataFrame(data=values, columns=self.node[child]['levels'], index=index)
         if len(parents) == 1 and parents[0] is not None:
-            df = pd.DataFrame(data=values, columns=bn.node[child]['levels'], index=indices)
+            df = pd.DataFrame(data=values, columns=self.node[child]['levels'], index=indices)
             df.index.name = parents[0]
             self.cpd[child] = df
         if parents[0] is None:
-            self.cpd[child] = pd.DataFrame(data=values, columns=bn.node[child]['levels'])
+            self.cpd[child] = pd.DataFrame(data=values, columns=self.node[child]['levels'])
         return
 
     def get_probability(self, name, evidence=dict(), value=None):
         cpd = self.cpd[name]
-        if len(evidence) > 0:
+        if len(evidence) > 1:
             levels = list(evidence.keys())
             values = list(evidence.values())
-            if value is None:
-                return cpd.xs(values, level=levels)
-            else:
+            if value is not None:
                 return cpd.xs(values, level=levels)[value]
-        else:
+            else:
+                return cpd.xs(values, level=levels)
+        elif len(evidence) == 1:
+            values = list(evidence.values())
+            if value is not None:
+                return cpd.loc[values[0], value]
+            else:
+                return cpd.loc[values[0]]
+        elif len(evidence) == 0:
             if value is not None:
                 return cpd[value]
             else:
                 return cpd
 
     def sample(self, name, given=dict(), r=None):
-        cpd = self.cpd[name]
-        if not set(self.node[name]['parents']) == set(given.keys()):
-            raise Exception('Parent samples need to be provided to sample child.')
-        if len(given) > 0:
-            cpd = bn.get_probability(name, evidence=given)
+        parents = self.node[name]['parents']
+        if parents[0] is None:
+            cpd = self.get_probability(name)
+        else:
+            if not set(parents) == set(given.keys()):
+                raise Exception('Parent samples need to be provided to sample child.')
+            cpd = self.get_probability(name, evidence=given)
         if r is None:
             r = np.random.uniform()
-        print(r)
         sum = 0
-        for column in cpd:
-            sum += list(cpd[column])[0]
-            if r < sum:
-                return column
+        if len(cpd.shape) == 1:
+            cpd = dict(cpd)
+            for key in cpd:
+                sum += cpd[key]
+                if r < sum:
+                    return key
+        if len(cpd.shape) == 2:
+            for column in cpd:
+                sum += list(cpd[column])[0]
+                if r < sum:
+                    return column
+
+    def compute_sample(self):
+        unobserved = set(self.node.keys())
+        sample = dict()
+        for node in unobserved:
+            sample = self.sample_nodes([node], sample)
+            unobserved = unobserved - set(sample.keys())
+        return sample
+
+    def sample_nodes(self, nodes, sample):
+        for node in nodes:
+            if node not in sample.keys():
+                parents = self.node[node]['parents']
+                if parents[0] is None:
+                    sample[node] = self.sample(node)
+                elif set(parents) <= set(sample.keys()):
+                    given = {key: sample[key] for key in parents}
+                    sample[node] = self.sample(node, given)
+                else:
+                    sample = self.sample_nodes(nodes=parents, sample=sample)
+                    given = {key: sample[key] for key in parents}
+                    # print(node, end=': ')
+                    # print(given)
+                    sample[node] = self.sample(node, given)
+        return sample
 
 bn = Network('Alarm')
 bn.add_node('HISTORY', 'discrete', 2, ('TRUE', 'FALSE'))
@@ -108,7 +147,7 @@ bn.add_probability('HISTORY', ['LVFAILURE'], [(('TRUE'), (0.9, 0.1)),
 bn.add_probability('CVP', ['LVEDVOLUME'], [(('LOW'), (0.95, 0.04, 0.01)),
                                            (('NORMAL'), (0.04, 0.95, 0.01)),
                                            (('HIGH'), (0.01, 0.29, 0.7))])
-bn.add_probability('PCWP', ['LVFAILURE'], [(('LOW'), (0.95, 0.04, 0.01)),
+bn.add_probability('PCWP', ['LVEDVOLUME'], [(('LOW'), (0.95, 0.04, 0.01)),
                                            (('NORMAL'), (0.04, 0.95, 0.01)),
                                            (('HIGH'), (0.01, 0.04, 0.95))])
 bn.add_probability('HYPOVOLEMIA', [None], [((None), (0.2, 0.8))])
