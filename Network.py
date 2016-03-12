@@ -1,13 +1,14 @@
 import numpy as np
 import pandas as pd
 from progress.bar import ChargingBar as Bar
+from random import randint
+
 
 class Network(object):
 
     def __init__(self, name):
         self.name = name
         self.node = dict()
-        # self.parents = dict()
         self.cpd = dict()
         return
 
@@ -77,12 +78,24 @@ class Network(object):
                 if r < sum:
                     return column
 
-    def compute_sample(self):
+    def compute_sample(self, preset=dict()):
         unobserved = set(self.node.keys())
-        sample = dict()
+        sample = dict(preset)
+        unobserved = unobserved - set(sample.keys())
         for node in unobserved:
             sample = self.sample_nodes([node], sample)
             unobserved = unobserved - set(sample.keys())
+        return sample
+
+    def random_sample(self, preset=dict()):
+        unobserved = set(self.node.keys())
+        sample = dict(preset)
+        unobserved = unobserved - set(sample.keys())
+        for node in unobserved:
+            values = bn.cpd[node]
+            values = list(values)
+            ind = randint(0, len(values)-1)
+            sample[node] = values[ind]
         return sample
 
     def sample_nodes(self, nodes, sample):
@@ -97,16 +110,13 @@ class Network(object):
                 else:
                     sample = self.sample_nodes(nodes=parents, sample=sample)
                     given = {key: sample[key] for key in parents}
-                    # print(node, end=': ')
-                    # print(given)
                     sample[node] = self.sample(node, given)
         return sample
 
     def rejection_sample(self, predict=dict(), given=dict(), n=100):
         sum = 0
-        iter = n
-        bar = Bar('Sampling', max=iter)
-        for i in range(iter):
+        bar = Bar('Sampling', max=n)
+        for i in range(n):
             bar.next()
             sample = self.compute_sample()
             evidence = {key: sample[key] for key in given.keys()}
@@ -117,7 +127,53 @@ class Network(object):
                 continue
             sum += 1
         bar.finish()
-        return sum/iter
+        return sum/n
+
+    def likelihood_weighting(self, predict=dict(), given=dict(), n=100):
+        num = den = 0
+        bar = Bar('Sampling', max=n)
+        for i in range(n):
+            bar.next()
+            sample = self.compute_sample(preset=predict)
+            for node in predict.keys():
+                parents = self.node[node]['parents']
+                given_pa = {key: sample[key] for key in parents}
+                weight = self.get_probability(node, evidence=given_pa, value=predict[node])
+            evidence = {key: sample[key] for key in given.keys()}
+            if given == evidence:
+                num += weight
+            den += weight
+        bar.finish()
+        return num/den
+
+    def gibbs_sampling(self, predict=dict(), given=dict(), n=10000, skip = 50):
+        bar = Bar('Sampling', max=n)
+        nodes = list(self.node.keys())
+        sample = self.random_sample(preset=given)
+        count = 0
+        sum = 0
+        for i in range(n):
+            last = None
+            bar.next()
+            node = None
+            last = node
+            while node is None or node in given.keys() or node == last:
+                node = nodes[randint(0,len(nodes)-1)]
+            parents = self.node[node]['parents']
+            if parents[0] is None:
+                sample[node] = self.sample(node)
+            else:
+                given = {key: sample[key] for key in parents}
+                sample[node] = self.sample(node, given=given)
+            if count == skip:
+                evidence = {key: sample[key] for key in predict.keys()}
+                if not predict == evidence:
+                    continue
+                sum += 1
+            else:
+                count += 1
+        bar.finish()
+        return sum/(n-count)
 
 bn = Network('Alarm')
 bn.add_node('HISTORY', 'discrete', 2, ('TRUE', 'FALSE'))
