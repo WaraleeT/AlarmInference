@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from progress.bar import ChargingBar as Bar
 from random import randint
+from collections import Counter
 
 
 class Network(object):
@@ -113,7 +114,7 @@ class Network(object):
                     sample[node] = self.sample(node, given)
         return sample
 
-    def rejection_sample(self, predict=dict(), given=dict(), n=100):
+    def rejection_sample(self, predict=dict(), given=dict(), n=10000):
         sum = 0
         bar = Bar('Sampling', max=n)
         for i in range(n):
@@ -129,7 +130,7 @@ class Network(object):
         bar.finish()
         return sum/n
 
-    def likelihood_weighting(self, predict=dict(), given=dict(), n=100):
+    def likelihood_weighting(self, predict=dict(), given=dict(), n=10000):
         num = den = 0
         bar = Bar('Sampling', max=n)
         for i in range(n):
@@ -174,6 +175,22 @@ class Network(object):
                 count += 1
         bar.finish()
         return sum/(n-count)
+
+    def predict(self, nodes, algorithm='gibbs', given=dict(), n=10000, skip=100):
+        p = dict()
+        for node in nodes:
+            p[node] = dict()
+            levels = self.node[node]['levels']
+            for level in levels:
+                predict = {node:level}
+                if algorithm == 'gibbs':
+                    p[node][level] = self.gibbs_sampling(predict=predict, given=given, n=n, skip=skip)
+                elif algorithm == 'reject':
+                    p[node][level] = self.rejection_sample(predict=predict, given=given, n=n)
+                elif algorithm == 'weighting':
+                    p[node][level] = self.likelihood_weighting(predict=predict, given=given, n=n)
+            p[node] = Counter(p[node]).most_common(1)
+        return p
 
 bn = Network('Alarm')
 bn.add_node('HISTORY', 'discrete', 2, ('TRUE', 'FALSE'))
