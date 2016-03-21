@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jaideepcoder/AlarmInference.svg?branch=master)](https://travis-ci.org/jaideepcoder/AlarmInference)
+
 # AlarmInference
 
 This file contains boilerplate code to explain how to use the inference algorithms implemented in order to run custom
