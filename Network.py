@@ -138,7 +138,7 @@ class Network(object):
             for node in predict.keys():
                 parents = self.node[node]['parents']
                 given_pa = {key: sample[key] for key in parents}
-                weight = self.get_probability(node, evidence=given_pa, value=predict[node])
+                weight = float(self.get_probability(node, evidence=given_pa, value=predict[node]))
             evidence = {key: sample[key] for key in given.keys()}
             if given == evidence:
                 num += weight
