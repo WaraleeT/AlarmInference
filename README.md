@@ -76,5 +76,5 @@ print(prob)
 Lastly, this statement returns the likely value of the given node with its posterior probability.
 
 ````python
-print(bn.predict(nodes=['HRSAT'], algorithm='gibbs', given={'PCWP': 'NORMAL', 'VENTLUNG': 'LOW'}, n=100, skip=50))
+print(bn.predict(nodes=['HRSAT'], algorithm='gibbs', given={'PCWP': 'NORMAL', 'VENTLUNG': 'LOW'}, n=10000, skip=50))
 ````
