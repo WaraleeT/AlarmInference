@@ -29,7 +29,7 @@ print(sample)
 
 # With the help of the above method, a complete sample can be generated from be generated using a simple statement.
 sample = bn.compute_sample()
-
+print(sample)
 # Another method of generating a completely random sample, without any consideration of the CPDs is shown below.
 random_sample = bn.random_sample()
 print(random_sample)
